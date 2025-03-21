@@ -1,0 +1,469 @@
+#config-version=FGVMK6-7.2.1-FW-build1254-220803:opmode=0:vdom=0:user=admin
+#conf_file_ver=2430101086572702
+#buildno=1254
+#global_vdom=1
+system_global:
+    alias: "FGVM02TM25000700"
+    hostname: "W-LBT-FG"
+    timezone: 04
+
+system_interface:
+    - port1:
+        vdom: "root"
+        mode: dhcp
+        allowaccess: ping https ssh http
+        type: physical
+        alias: "INTERNET"
+        snmp-index: 1
+
+    - port2:
+        vdom: "root"
+        ip: 12.3.0.2 255.255.255.0
+        allowaccess: ping
+        type: physical
+        alias: "to_ISP1"
+        lldp-reception: enable
+        role: wan
+        snmp-index: 2
+
+    - port3:
+        vdom: "root"
+        ip: 12.2.0.2 255.255.255.0
+        allowaccess: ping
+        type: physical
+        alias: "to_ISP2"
+        lldp-reception: enable
+        role: wan
+        snmp-index: 3
+
+    - port4:
+        vdom: "root"
+        allowaccess: ping
+        type: physical
+        alias: "to_W-LBT"
+        device-identification: enable
+        device-user-identification: disable
+        lldp-transmission: enable
+        role: lan
+        snmp-index: 4
+
+    - port5:
+        vdom: "root"
+        type: physical
+        snmp-index: 5
+
+    - port6:
+        vdom: "root"
+        type: physical
+        snmp-index: 6
+
+    - port7:
+        vdom: "root"
+        type: physical
+        snmp-index: 7
+
+    - port8:
+        vdom: "root"
+        type: physical
+        snmp-index: 8
+
+    - port9:
+        vdom: "root"
+        type: physical
+        snmp-index: 9
+
+    - port10:
+        vdom: "root"
+        ip: 10.0.99.1 255.255.255.0
+        allowaccess: ping https ssh http
+        type: physical
+        snmp-index: 10
+
+    - naf.root:
+        vdom: "root"
+        type: tunnel
+        src-check: disable
+        snmp-index: 11
+
+    - l2t.root:
+        vdom: "root"
+        type: tunnel
+        snmp-index: 12
+
+    - ssl.root:
+        vdom: "root"
+        type: tunnel
+        alias: "SSL VPN interface"
+        snmp-index: 13
+
+    - fortilink:
+        vdom: "root"
+        fortilink: enable
+        ip: 10.255.1.1 255.255.255.0
+        allowaccess: ping fabric
+        type: aggregate
+        lldp-reception: enable
+        lldp-transmission: enable
+        snmp-index: 14
+
+    - W-LBT-CLIENTS:
+        vdom: "root"
+        dhcp-relay-service: enable
+        ip: 10.0.10.254 255.255.255.0
+        alias: "CLIENTS"
+        device-identification: enable
+        role: lan
+        snmp-index: 15
+        dhcp-relay-ip: "10.0.30.1"
+        interface: "port4"
+        vlanid: 10
+
+    - W-LBT-SERVICES:
+        vdom: "root"
+        ip: 10.0.20.254 255.255.255.0
+        allowaccess: ping
+        alias: "SERVICES"
+        device-identification: enable
+        role: lan
+        snmp-index: 16
+        interface: "port4"
+        vlanid: 20
+
+    - W-LBT-DC:
+        vdom: "root"
+        ip: 10.0.30.254 255.255.255.0
+        allowaccess: ping
+        alias: "Domain Controller"
+        device-identification: enable
+        role: lan
+        snmp-index: 17
+        interface: "port4"
+        vlanid: 30
+
+    - W-LBT-MGMT:
+        vdom: "root"
+        ip: 10.0.40.254 255.255.255.0
+        allowaccess: ping
+        alias: "Management"
+        device-identification: enable
+        role: lan
+        snmp-index: 18
+        interface: "port4"
+        vlanid: 40
+
+    - W_to_HD:
+        vdom: "root"
+        type: tunnel
+        snmp-index: 19
+        interface: "Loopback0"
+
+    - Loopback0:
+        vdom: "root"
+        ip: 12.12.12.12 255.255.255.255
+        allowaccess: ping
+        type: loopback
+        snmp-index: 20
+
+    - W-LBT-MCD-VPN:
+        vdom: "root"
+        ip: 169.254.1.1 255.255.255.255
+        allowaccess: fabric
+        type: tunnel
+        remote-ip: 169.254.1.1 255.255.255.255
+        snmp-index: 21
+        interface: "port2"
+
+system_ha:
+    group-id: 1000
+    group-name: "W-LBT-HA"
+    mode: a-a
+    password: ENC pv11IR4oAEno+X6IduzFrO+5rfAt/jChRMewGzQt5c50I9XZBmvkg9mci3/fLzgNH75CPpSuiut1NqGkYTXuFNeg3FRmaBZwKAPYp48t3MfysxxJ7E2nfuE5sACiq4KBBTwr4vtOrG87e4BWfqkPs1wNyi5+3bmy5TkPSQPAQ/OqIrpfKVdG+MNzQnBJQ92weiuqYw==
+    hbdev: "port5" 0 "port6" 0
+    override: enable
+    priority: 255
+
+firewall_address:
+    - W-LBT-CLIENTS address:
+        uuid: f966d016-eea6-51ef-cc45-4169a1b70013
+        type: interface-subnet
+        subnet: 10.0.10.254 255.255.255.0
+        interface: "W-LBT-CLIENTS"
+
+    - W-LBT-DC address:
+        uuid: f96bab0e-eea6-51ef-388b-fa4140b0bcde
+        type: interface-subnet
+        subnet: 10.0.30.254 255.255.255.0
+        interface: "W-LBT-DC"
+
+    - W-LBT-MGMT address:
+        uuid: f970483a-eea6-51ef-a3eb-871d4a00231f
+        type: interface-subnet
+        subnet: 10.0.40.254 255.255.255.0
+        interface: "W-LBT-MGMT"
+
+    - W-LBT-SERVICES address:
+        uuid: f9751ee6-eea6-51ef-7ca7-70711f647131
+        type: interface-subnet
+        subnet: 10.0.20.254 255.255.255.0
+        interface: "W-LBT-SERVICES"
+
+    - HD-LBT-SERVERS:
+        uuid: 12d9c624-eead-51ef-ca17-fc011342982e
+        subnet: 172.16.0.0 255.255.255.0
+
+    - W-LBT-MCD-VPN_range:
+        uuid: a8ee7a14-f3b8-51ef-496c-4a8a34b67c30
+        type: iprange
+        comment: "VPN: W-LBT-MCD-VPN (Created by VPN wizard)"
+        start-ip: 10.0.10.10
+        end-ip: 10.0.10.20
+
+firewall_addrgrp:
+    - W-LBT-MCD-VPN_split:
+        uuid: a8405db2-f3b8-51ef-4332-21b92553620c
+        member: "W-LBT-CLIENTS address"
+        comment: "VPN: W-LBT-MCD-VPN (Created by VPN wizard)"
+
+    - W-LBT-SBD:
+        comment: "All predefined signatures with default setting."
+        block-malicious-url: enable
+        scan-botnet-connections: block
+        entries:
+            - 1:
+                os: Windows
+                application: Cisco
+                status: enable
+
+
+
+
+firewall_shaper_traffic-shaper:
+    - W-LBT-Shaping-YT:
+        maximum-bandwidth: 1048576
+        priority: low
+        per-policy: enable
+
+
+webfilter_urlfilter:
+    - 1:
+        name: "Auto-webfilter-urlfilter_z0k0ssdwk"
+        entries:
+            - 1:
+                url: "https://store.steampowered.com/*"
+                type: regex
+                action: block
+
+vpn_ipsec_phase1-interface:
+    - W_to_HD:
+        interface: "Loopback0"
+        ike-version: 2
+        local-gw: 12.12.12.12
+        peertype: any
+        net-device: disable
+        proposal: aes256-sha512
+        dhgrp: 14
+        remote-gw: 12.0.0.2
+        psksecret: ENC CZS6mOXcnHSsmKy1m03I+uvDC5GW7lVGvJlMxV+RSmJ6qxkTsxzcUjFg7NQa066+yB9lTC0jt4weguOY1IJVyNzx/r1aVNGk7lQFWE3Wk8M5HkuRweK0Xs0QBa6XAzVinFy2GAjxGcF1B/RBVv93xOPApQDmFFoumtZCeSebqup1zlQvdOUCR6gtM4kagKh9fbkS6w==
+
+    - W-LBT-MCD-VPN:
+        type: dynamic
+        interface: "port2"
+        mode: aggressive
+        peertype: any
+        net-device: disable
+        mode-cfg: enable
+        proposal: aes128-sha256 aes256-sha256 aes128-sha1 aes256-sha1
+        comments: "VPN: W-LBT-MCD-VPN (Created by VPN wizard)"
+        wizard-type: dialup-forticlient
+        xauthtype: auto
+        authusrgrp: "Guest-group"
+        ipv4-start-ip: 10.0.10.10
+        ipv4-end-ip: 10.0.10.20
+        ipv4-netmask: 255.255.255.0
+        dns-mode: auto
+        ipv4-split-include: "W-LBT-MCD-VPN_split"
+        save-password: enable
+        client-auto-negotiate: enable
+        client-keep-alive: enable
+        psksecret: ENC 9eOjbfWy0ufSdWJQPbxAQQxbpy7YVhVozSu6ueFkO5vNkfb9jtlv/GFhvYs/kzwGmUlIoy8KYhgrccLlXVPBw0yVTBv+ECfpy+M3C9GS6NCDB5HkU72QPxhyg+Wpku8ZrQ1BY8p2aecaFnwsiiQB54cvsM33dTOEqhO8LfQc/CR7oSOtFQixR2RJxKVcTjI3AZeEoA==
+
+
+vpn_ipsec_phase2-interface:
+    - VIENNA-TO-HD:
+        phase1name: "W_to_HD"
+        proposal: aes256-sha512
+        dhgrp: 14
+        src-subnet: 10.0.30.0 255.255.255.0
+        dst-subnet: 172.16.0.0 255.255.255.0
+
+    - W-LBT-MCD-VPN:
+        phase1name: "W-LBT-MCD-VPN"
+        proposal: aes128-sha1 aes256-sha1 aes128-sha256 aes256-sha256 aes128gcm aes256gcm chacha20poly1305
+        comments: "VPN: W-LBT-MCD-VPN (Created by VPN wizard)"
+
+
+antivirus_profile:
+    - W-LBT-MALWARE:
+        comment: "Scan files and block viruses."
+        http:
+            av-scan: block
+            quarantine: enable
+
+        ftp:
+            av-scan: block
+            quarantine: enable
+
+        imap:
+            av-scan: block
+            quarantine: enable
+            executables: virus
+
+        pop3:
+            av-scan: block
+            quarantine: enable
+            executables: virus
+
+        smtp:
+            av-scan: block
+            quarantine: enable
+            executables: virus
+
+webfilter_profile:
+    - W-LBT-Webfilter:
+        comment: "Default web filtering."
+        web:
+            urlfilter-table: 1
+
+firewall_policy:
+    - 1:
+        name: "W-LBT-DC-to-SERVICES"
+        uuid: fcfdc34c-eea6-51ef-fc73-bba7947e8afb
+        srcintf: "W-LBT-DC"
+        dstintf: "W-LBT-SERVICES"
+        action: accept
+        srcaddr: "W-LBT-DC address"
+        dstaddr: "W-LBT-SERVICES address"
+        schedule: "always"
+        service: "Windows AD"
+
+    - 2:
+        name: "W-LBT-SERVICES-TO-DC"
+        uuid: fd074b42-eea6-51ef-e9ff-3a1eabae9528
+        srcintf: "W-LBT-SERVICES"
+        dstintf: "W-LBT-DC"
+        action: accept
+        srcaddr: "W-LBT-SERVICES address"
+        dstaddr: "W-LBT-DC address"
+        schedule: "always"
+        service: "Windows AD"
+
+    - 3:
+        name: "W-LBT-CLIENTS-to-DC"
+        uuid: fd0fca56-eea6-51ef-e7f4-0059ecf36826
+        srcintf: "W-LBT-CLIENTS"
+        dstintf: "W-LBT-DC"
+        action: accept
+        srcaddr: "W-LBT-CLIENTS address"
+        dstaddr: "W-LBT-DC address"
+        schedule: "always"
+        service: "Windows AD" "DHCP"
+
+    - 4:
+        name: "W-LBT-DC-to-CLIENTS"
+        uuid: fd184ef6-eea6-51ef-f24e-ae6de6996db0
+        srcintf: "W-LBT-CLIENTS"
+        dstintf: "W-LBT-DC"
+        action: accept
+        srcaddr: "W-LBT-DC address"
+        dstaddr: "W-LBT-CLIENTS address"
+        schedule: "always"
+        service: "Windows AD" "DHCP"
+
+    - 6:
+        name: "HD-Servers_to_W-DC"
+        uuid: e961925c-eeb8-51ef-aa27-01f268ffa111
+        srcintf: "W_to_HD"
+        dstintf: "W-LBT-DC"
+        action: accept
+        srcaddr: "HD-LBT-SERVERS"
+        dstaddr: "W-LBT-DC address"
+        schedule: "always"
+        service: "ALL_ICMP" "Windows AD"
+
+    - 5:
+        name: "W-DC-to-HD-SERVERS"
+        uuid: 320706ce-eead-51ef-74c6-76fb747244f2
+        srcintf: "W-LBT-DC" "port4"
+        dstintf: "W_to_HD"
+        action: accept
+        srcaddr: "W-LBT-DC address"
+        dstaddr: "HD-LBT-SERVERS"
+        schedule: "always"
+        service: "Windows AD"
+
+    - 7:
+        status: disable
+        name: "W-LBT-to-INET"
+        uuid: 11e1c1d6-f35d-51ef-b777-485ab689dd8d
+        srcintf: "W-LBT-CLIENTS" "W-LBT-DC" "W-LBT-SERVICES"
+        dstintf: "port1"
+        action: accept
+        srcaddr: "W-LBT-CLIENTS address" "W-LBT-DC address" "W-LBT-SERVICES address"
+        dstaddr: "all"
+        schedule: "always"
+        service: "ALL"
+        utm-status: enable
+        ssl-ssh-profile: "certificate-inspection"
+        av-profile: "W-LBT-MALWARE"
+        webfilter-profile: "W-LBT-Webfilter"
+        ips-sensor: "W-LBT-SBD"
+        nat: enable
+
+    - 8:
+        name: "VPN-to_Lo0"
+        uuid: 1a99b944-f396-51ef-2f7a-aa10b8afb149
+        srcintf: "port2" "port3"
+        dstintf: "Loopback0"
+        action: accept
+        srcaddr: "all"
+        dstaddr: "all"
+        schedule: "always"
+        service: "BGP" "ESP" "IKE" "PING"
+
+    - 9:
+        name: "W-LBT-DC-to_MGMT"
+        uuid: 9184c84a-f3b0-51ef-44b3-cd9b9dd940f1
+        srcintf: "W-LBT-DC"
+        dstintf: "W-LBT-MGMT"
+        action: accept
+        srcaddr: "W-LBT-DC address"
+        dstaddr: "W-LBT-MGMT address"
+        schedule: "always"
+        service: "ALL"
+        nat: enable
+
+    - 10:
+        name: "vpn_W-LBT-MCD-VPN_remote_0"
+        uuid: a8f3341e-f3b8-51ef-cc4b-c086111aa93c
+        srcintf: "W-LBT-MCD-VPN"
+        dstintf: "W-LBT-CLIENTS"
+        action: accept
+        srcaddr: "W-LBT-MCD-VPN_range"
+        dstaddr: "W-LBT-CLIENTS address"
+        schedule: "always"
+        service: "ALL"
+        nat: enable
+        comments: "VPN: W-LBT-MCD-VPN (Created by VPN wizard)"
+
+
+firewall_shaping-policy:
+    - 1:
+        uuid: 80fe1df8-f35d-51ef-0c38-229f93fa4d9d
+        name: "W-LBT-YT"
+        service: "ALL"
+        application: 31077
+        srcintf: "W-LBT-CLIENTS"
+        dstintf: "port1"
+        traffic-shaper: "W-LBT-Shaping-YT"
+        srcaddr: "all"
+        dstaddr: "Youtube"

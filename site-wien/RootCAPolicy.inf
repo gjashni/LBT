@@ -1,0 +1,21 @@
+[Version]
+Signature="$Windows NT$"
+
+[PolicyStatementExtension]
+Policies=InternalPolicy
+
+[InternalPolicy]
+OID= 1.2.3.4.1455.67.89.5
+Notice="This is the Root-Certificate-Authority of the LBT Team 12 Domain"
+URL=http://pki.lbt12.at/CertEnroll/cps.txt
+
+[Certsrv_Server]
+RenewalKeyLength=4096
+RenewalValidityPeriod=Years
+RenewalValidityPeriodUnits=20
+CRLPeriod=weeks
+CRLPeriodUnits=26
+CRLDeltaPeriod=Days
+CRLDeltaPeriodUnits=0
+LoadDefaultTemplates=0
+AlternateSignatureAlgorithm=0

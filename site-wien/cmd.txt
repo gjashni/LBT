@@ -1,0 +1,13 @@
+certutil -setreg CA\CACertPublicationURLs “1:C:\Windows\system32\CertSrv\CertEnroll\%1_%3%4.crt\n2:ldap:///CN=%7,CN=AIA,CN=Public Key Services,CN=Services,%6%11\n2:http://pki.EncryptionConsulting.com/CertEnroll/%1_%3%4.crt”
+certutil -getreg CA\CACertPublicationURLs
+C:\Windows\system32\CertSrv\CertEnroll\%1_%3%4.crt
+ldap:///CN=%7,CN=AIA,CN=Public Key Services,CN=Services,%6%11
+http://pki.EncryptionConsulting.com/CertEnroll/%1_%3%4.crt
+
+certutil -setreg CA\CRLPublicationURLs “1:C:\Windows\system32\CertSrv\CertEnroll\%3%8%9.crl\n10:ldap:///CN=%7%8,CN=%2,CN=CDP,CN=Public Key Services,CN=Services,%6%10\n2:http://pki.EncryptionConsulting.com/CertEnroll/%3%8%9.crl”
+certutil -getreg CA\CRLPublicationURLs
+
+
+C:\Windows\system32\CertSrv\CertEnroll\%3%8%9.crl
+10:ldap:///CN=%7%8,CN=%2,CN=CDP,CN=Public Key Services,CN=Services,%6%10
+http://pki.EncryptionConsulting.com/CertEnroll/%3%8%9.crl

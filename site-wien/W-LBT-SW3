@@ -1,0 +1,95 @@
+en
+conf t
+hostn W-LBT-SW3
+
+service password-enc
+no ip domain-look
+
+ip domain-name lbt12.at
+
+username admin priv 15
+username admin algorithm-type scrypt secret TeamLBT12!
+
+line con 0
+exec-t 0
+login local
+logging synchr
+
+line vty 0 924
+exec-t 0
+login local
+transport input ssh
+
+ip ssh version 2
+crypto key generate rsa modulus 2048
+
+vtp mode client
+vtp domain LBT12
+vtp password cisco
+vtp version 3
+
+ip arp inspection vlan 10,20
+
+ip dhcp snooping
+no ip dhcp snooping information option
+
+sp mode rapid-pvst
+
+err r c b
+err r i 400
+
+int vlan 40
+ip add 10.0.40.3 255.255.255.0
+no shut
+
+int range g0/0-3,g1/0-3,g2/0-3,g3/0-3
+desc BLACKHOLE
+sw mode access
+sw access vlan 666
+shut
+
+int range g1/0-1
+desc to_W-LBT-SW1
+no sw access vlan 666
+sw trunk en d
+sw mode trunk
+sw trunk allowed vlan 10,20,30,40
+channel-group 3 mode on
+ip dhcp snooping trust
+no shut
+
+int range g2/0-1
+desc to_W-LBT-SW2
+no sw access vlan 666
+sw trunk en d
+sw mode trunk
+sw trunk allowed vlan 10,20,30,40
+channel-group 4 mode on
+ip dhcp snooping trust
+no shut
+
+int g0/0
+desc to_W-LBT-DC1
+no sw access vlan 666
+sw mode acc
+sw acc vlan 30
+spa portf
+ip dhcp snooping trust
+no shut
+
+int g0/1
+desc to_W-LBT-DC2
+no sw access vlan 666
+sw mode acc
+sw acc vlan 30
+spa portf
+ip dhcp snooping trust
+no shut
+
+int g0/2
+desc to_W-LBT-JUMP
+no sw access vlan 666
+sw mode acc
+sw acc vlan 30
+spa portf
+no shut
