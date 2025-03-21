@@ -49,6 +49,7 @@
 
 = Konfiguration <config>
 Alle Scripts sind auf https://github.com/gjashni/LBT zu finden.
+
 /*
 #include "portfolio/config.typ"
 */
