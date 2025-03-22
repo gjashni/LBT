@@ -7,4 +7,4 @@ The documentation is based on Typst and consists of a `main.typ` file which incl
 
 ## Configuration
 
-The configuration (including all Powershell-, Bash-, FortiOS-, Cisco IOSv Scripts) is located in `site-wien/` and `site-heidelberg` respectively.
+The configuration (including all Powershell-, Bash-, FortiOS-, Cisco IOSv Scripts) is located in `site-wien/` and `site-heidelberg/` respectively.
